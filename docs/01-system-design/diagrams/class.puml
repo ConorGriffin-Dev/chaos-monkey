@@ -1,0 +1,153 @@
+@startuml class
+!theme plain
+title Chaos Monkey — Class Diagram
+
+skinparam backgroundColor #FAFAFA
+skinparam roundcorner 8
+skinparam class {
+    BackgroundColor #2D2D2D
+    BorderColor #555555
+    FontColor white
+    HeaderBackgroundColor #3D6B8E
+}
+skinparam arrow {
+    Color #555555
+    FontSize 11
+}
+
+package "cli" {
+    class ChaosMonkeyCLI {
+        -config: FuzzConfig
+        +main(args: String[]): void
+        +run(): void
+    }
+}
+
+package "config" {
+    class FuzzConfig {
+        +baseUrl: String
+        +specLocation: String
+        +outputDir: String
+        +timeoutMs: int
+    }
+}
+
+package "parser" {
+    class OpenApiParser {
+        -config: FuzzConfig
+        +parse(): List<FuzzTarget>
+        -extractFields(schema: Schema): Map<String, FieldSchema>
+        -extractConstraints(schema: Schema): FieldConstraints
+    }
+}
+
+package "fuzzer" {
+    class FuzzPayloadGenerator {
+        -library: FuzzPayloadLibrary
+        +generate(targets: List<FuzzTarget>): List<FuzzCase>
+        +generateForType(type: String, constraints: FieldConstraints): List<Object>
+    }
+
+    class FuzzPayloadLibrary {
+        -strings: List<String>
+        -integers: List<Integer>
+        -booleans: List<Object>
+        +load(): void
+        +getStrings(): List<String>
+        +getIntegers(): List<Integer>
+        +getBooleans(): List<Object>
+    }
+}
+
+package "runner" {
+    class FuzzRunner {
+        -config: FuzzConfig
+        -analyser: ResponseAnalyser
+        +run(cases: List<FuzzCase>): List<FuzzResult>
+        -executeRequest(fuzzCase: FuzzCase): FuzzResult
+    }
+
+    class ResponseAnalyser {
+        +analyse(result: FuzzResult): FuzzResult
+        -detectStackTrace(body: String): boolean
+        -detectDbError(body: String): boolean
+        -detectUnexpectedSuccess(result: FuzzResult): boolean
+        -detectSlowResponse(durationMs: long): boolean
+    }
+}
+
+package "model" {
+    class FuzzTarget {
+        +path: String
+        +method: String
+        +fields: Map<String, FieldSchema>
+    }
+
+    class FieldSchema {
+        +type: String
+        +constraints: FieldConstraints
+    }
+
+    class FieldConstraints {
+        +minimum: Integer
+        +maximum: Integer
+        +minLength: Integer
+        +maxLength: Integer
+        +nullable: Boolean
+        +enumValues: List<String>
+    }
+
+    class FuzzCase {
+        +target: FuzzTarget
+        +fieldName: String
+        +payload: Object
+    }
+
+    class FuzzResult {
+        +endpoint: String
+        +method: String
+        +fieldName: String
+        +payload: Object
+        +statusCode: int
+        +responseBody: String
+        +durationMs: long
+        +flags: List<String>
+    }
+}
+
+package "reporter" {
+    class AllureReporter {
+        -config: FuzzConfig
+        +write(results: List<FuzzResult>): void
+        -buildTestResult(result: FuzzResult): TestResult
+        -attachResponseBody(result: FuzzResult): void
+    }
+}
+
+' Relationships
+ChaosMonkeyCLI --> FuzzConfig : "builds"
+ChaosMonkeyCLI --> OpenApiParser : "uses"
+ChaosMonkeyCLI --> FuzzPayloadGenerator : "uses"
+ChaosMonkeyCLI --> FuzzRunner : "uses"
+ChaosMonkeyCLI --> AllureReporter : "uses"
+
+OpenApiParser --> FuzzTarget : "produces"
+OpenApiParser --> FieldSchema : "produces"
+OpenApiParser --> FieldConstraints : "produces"
+
+FuzzPayloadGenerator --> FuzzPayloadLibrary : "uses"
+FuzzPayloadGenerator --> FuzzCase : "produces"
+
+FuzzTarget --> FieldSchema : "contains"
+FieldSchema --> FieldConstraints : "contains"
+FuzzCase --> FuzzTarget : "references"
+
+FuzzRunner --> FuzzCase : "consumes"
+FuzzRunner --> FuzzResult : "produces"
+FuzzRunner --> ResponseAnalyser : "uses"
+
+ResponseAnalyser --> FuzzResult : "flags"
+
+AllureReporter --> FuzzResult : "consumes"
+
+@enduml

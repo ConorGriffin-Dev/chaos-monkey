@@ -1,0 +1,110 @@
+@startuml component
+!theme plain
+title Chaos Monkey — Component Diagram
+
+skinparam backgroundColor #FAFAFA
+skinparam roundcorner 8
+skinparam component {
+    BackgroundColor #2D2D2D
+    BorderColor #555555
+    FontColor white
+}
+skinparam arrow {
+    Color #555555
+    FontSize 11
+}
+skinparam note {
+    BackgroundColor #FFFDE7
+    BorderColor #F9A825
+}
+
+rectangle "Target REST API" as api #3D6B8E
+rectangle "OpenAPI Spec\n[remote or local]" as spec #3D6B8E
+database "fuzz-strings.json\n[payloads/]" as payloads #6B8E6B
+database "allure-results/\n[output]" as results #6B8E6B
+
+package "Chaos Monkey Application\n[@SpringBootApplication]" {
+
+    component "ChaosMonkeyCLI\n[cli/]\nEntry point. Registers CLI\ncommands via Spring Shell." as cli #3D6B8E
+
+    component "FuzzConfig\n[config/]\nHolds all runtime config.\nBound from CLI args via\nSpring Shell." as config #555555
+
+    component "OpenApiParser\n[parser/]\nReads OpenAPI 3.x spec.\nProduces List<FuzzTarget>." as parser #2D2D2D
+
+    component "FuzzPayloadGenerator\n[fuzzer/]\nGenerates schema-aware\npayloads per field." as generator #2D2D2D
+
+    component "FuzzPayloadLibrary\n[fuzzer/]\nLoads static fuzz strings.\nFallback when no spec." as library #2D2D2D
+
+    component "FuzzRunner\n[runner/]\nFires HTTP requests\nvia REST Assured." as runner #2D2D2D
+
+    component "ResponseAnalyser\n[runner/]\nFlags interesting responses.\nAttaches flag strings." as analyser #2D2D2D
+
+    component "AllureReporter\n[reporter/]\nWrites Allure result files\nper FuzzResult." as reporter #6B8E6B
+
+    note top of cli
+        @ShellComponent
+    end note
+
+    note top of parser
+        @Service
+    end note
+
+    note top of generator
+        @Service
+    end note
+
+    note top of runner
+        @Service
+    end note
+
+    note top of analyser
+        @Component
+    end note
+
+    note top of reporter
+        @Service
+    end note
+
+    note top of config
+        @ConfigurationProperties
+    end note
+}
+
+cli --> config : "builds from CLI args"
+cli --> parser : "invokes"
+cli --> generator : "invokes with List<FuzzTarget>"
+cli --> runner : "invokes with List<FuzzCase>"
+cli --> reporter : "invokes with List<FuzzResult>"
+
+config ..> parser : "<<injected>>"
+config ..> runner : "<<injected>>"
+config ..> reporter : "<<injected>>"
+
+parser --> spec : "fetches"
+parser --> cli : "returns List<FuzzTarget>"
+
+generator --> library : "delegates static payloads"
+library --> payloads : "reads"
+generator --> cli : "returns List<FuzzCase>"
+
+runner --> api : "fires HTTP requests"
+api --> runner : "returns responses"
+runner --> analyser : "passes each raw FuzzResult"
+analyser --> runner : "returns flagged FuzzResult"
+
+reporter --> results : "writes result files"
+
+note bottom of analyser
+  Flags applied:
+  SERVER_ERROR · STACK_TRACE_LEAKED
+  DB_ERROR_EXPOSED · UNEXPECTED_SUCCESS
+  SLOW_RESPONSE · EMPTY_SUCCESS_BODY
+  VALIDATION_MISSING
+end note
+
+note bottom of generator
+  Schema-aware when spec present.
+  Static payload fallback when not.
+end note
+
+@enduml

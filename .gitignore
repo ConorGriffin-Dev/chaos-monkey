@@ -1,0 +1,8 @@
+target/
+allure-results/
+allure-report/
+*.class
+*.jar
+.idea/
+*.iml
+.DS_Store

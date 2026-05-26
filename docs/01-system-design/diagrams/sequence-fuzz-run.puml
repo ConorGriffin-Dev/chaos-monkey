@@ -1,0 +1,77 @@
+@startuml sequence-fuzz-run
+!theme plain
+title Chaos Monkey — Sequence Diagram: Full Fuzz Run
+
+skinparam backgroundColor #FAFAFA
+skinparam roundcorner 8
+skinparam sequence {
+    ArrowColor #555555
+    ActorBorderColor #2C5F8A
+    ActorBackgroundColor #4A90D9
+    ActorFontColor white
+    ParticipantBorderColor #555555
+    ParticipantBackgroundColor #2D2D2D
+    ParticipantFontColor white
+    LifeLineBorderColor #AAAAAA
+    NoteBackgroundColor #FFFDE7
+    NoteBorderColor #F9A825
+}
+
+actor "QA Engineer" as qa
+participant "ChaosMonkeyCLI" as cli
+participant "OpenApiParser" as parser
+participant "FuzzPayloadGenerator" as generator
+participant "FuzzPayloadLibrary" as library
+participant "FuzzRunner" as runner
+participant "ResponseAnalyser" as analyser
+participant "AllureReporter" as reporter
+participant "Target API" as api
+
+qa -> cli : java -jar chaos-monkey.jar\n--url ... --spec ...
+activate cli
+
+cli -> cli : build FuzzConfig\nfrom CLI args
+
+cli -> parser : parse(config)
+activate parser
+parser -> parser : fetch OpenAPI spec\n(remote URL or local file)
+parser -> parser : extract endpoints,\nfields, types, constraints
+parser --> cli : List<FuzzTarget>
+deactivate parser
+
+cli -> generator : generate(targets)
+activate generator
+generator -> library : load fuzz-strings.json
+library --> generator : static payload lists
+generator -> generator : generateForType()\nper field × type × constraint
+generator --> cli : List<FuzzCase>
+deactivate generator
+
+note over cli : N fuzz cases ready\n(one per field × payload combination)
+
+loop for each FuzzCase
+    cli -> runner : execute(fuzzCase)
+    activate runner
+    runner -> api : HTTP request\n(REST Assured)\nwith fuzzed payload
+    activate api
+    api --> runner : response\n(status, body, headers, time)
+    deactivate api
+    runner -> analyser : analyse(rawResult)
+    activate analyser
+    analyser -> analyser : check status code\ncheck body for stack traces\ncheck body for DB errors\ncheck response time
+    analyser --> runner : FuzzResult with flags
+    deactivate analyser
+    runner --> cli : FuzzResult
+    deactivate runner
+end
+
+cli -> reporter : write(allResults)
+activate reporter
+reporter -> reporter : build Allure TestResult\nper FuzzResult
+reporter -> reporter : attach response body\nto flagged results
+reporter --> cli : results written\nto allure-results/
+deactivate reporter
+
+cli --> qa : Run complete.\nRun: allure serve ./allure-results
+
+@enduml

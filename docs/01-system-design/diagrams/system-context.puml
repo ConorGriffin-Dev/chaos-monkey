@@ -1,0 +1,50 @@
+@startuml system-context
+!theme plain
+title Chaos Monkey — System Context Diagram
+
+skinparam backgroundColor #FAFAFA
+skinparam roundcorner 8
+skinparam actor {
+    BackgroundColor #4A90D9
+    BorderColor #2C5F8A
+    FontColor white
+}
+skinparam rectangle {
+    BackgroundColor #2D2D2D
+    BorderColor #555555
+    FontColor white
+}
+skinparam database {
+    BackgroundColor #6B8E6B
+    BorderColor #4A6B4A
+    FontColor white
+}
+skinparam arrow {
+    Color #555555
+    FontSize 11
+}
+
+actor "QA Engineer" as qa
+
+rectangle "Chaos Monkey\n[Java 21 CLI Application]" as cm
+
+rectangle "Target REST API\n[e.g. Swagger Petstore v3\njsonplaceholder.typicode.com]" as api
+rectangle "OpenAPI Specification\n[JSON or YAML\nremote URL or local file]" as spec
+database "allure-results/\n[local filesystem]" as results
+rectangle "Allure Report\n[HTML — browser]" as report
+
+qa --> cm : "runs via CLI\n(--url, --spec, --output)"
+cm --> spec : "fetches and parses\nOpenAPI 3.x spec"
+cm --> api : "fires fuzz requests\nover HTTP (REST Assured)"
+api --> cm : "returns responses\n(status, body, headers, time)"
+cm --> results : "writes Allure\nresult files"
+results --> report : "allure serve\ngenerates HTML"
+qa --> report : "reviews findings\nin browser"
+
+note right of cm
+  Single-process Java 21 CLI.
+  No server. No database.
+  No persistent state between runs.
+end note
+
+@enduml

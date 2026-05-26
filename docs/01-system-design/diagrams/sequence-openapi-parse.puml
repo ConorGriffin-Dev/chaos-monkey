@@ -1,0 +1,74 @@
+@startuml sequence-openapi-parse
+!theme plain
+title Chaos Monkey — Sequence Diagram: OpenAPI Spec Parsing
+
+skinparam backgroundColor #FAFAFA
+skinparam roundcorner 8
+skinparam sequence {
+    ArrowColor #555555
+    ParticipantBorderColor #555555
+    ParticipantBackgroundColor #2D2D2D
+    ParticipantFontColor white
+    LifeLineBorderColor #AAAAAA
+    NoteBackgroundColor #FFFDE7
+    NoteBorderColor #F9A825
+}
+
+participant "ChaosMonkeyCLI" as cli
+participant "OpenApiParser" as parser
+participant "Swagger Parser\n[io.swagger.parser.v3]" as swagger
+participant "OpenAPI Spec\n[remote or local]" as spec
+
+cli -> parser : parse(config)
+activate parser
+
+parser -> swagger : new OpenAPIV3Parser().read(specLocation)
+activate swagger
+swagger -> spec : fetch JSON or YAML
+spec --> swagger : raw spec content
+swagger -> swagger : deserialise into\nOpenAPI object model
+swagger --> parser : OpenAPI object
+deactivate swagger
+
+parser -> parser : openAPI.getPaths()\nget all endpoint paths
+
+loop for each path entry
+    parser -> parser : get PathItem\n(GET, POST, PUT, DELETE, PATCH)
+
+    loop for each HTTP method on path
+        parser -> parser : extract Operation
+
+        alt operation has requestBody
+            parser -> parser : extract Schema\nfrom requestBody content
+            parser -> parser : iterate schema.getProperties()
+
+            loop for each field in schema
+                parser -> parser : read field type\n(string, integer, boolean...)
+                parser -> parser : read constraints\n(min, max, minLength, maxLength,\nnullable, enum)
+                parser -> parser : build FieldSchema\n+ FieldConstraints
+            end
+
+        else operation has parameters (GET/DELETE)
+            parser -> parser : extract path params\nand query params
+            loop for each parameter
+                parser -> parser : read type and constraints
+                parser -> parser : build FieldSchema\n+ FieldConstraints
+            end
+        end
+
+        parser -> parser : build FuzzTarget\n(path + method + fields map)
+    end
+end
+
+parser --> cli : List<FuzzTarget>
+deactivate parser
+
+note over cli
+  Each FuzzTarget contains:
+  - endpoint path
+  - HTTP method
+  - map of fieldName → FieldSchema
+  Ready for FuzzPayloadGenerator
+end note
+
+@enduml

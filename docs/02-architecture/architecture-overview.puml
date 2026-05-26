@@ -1,0 +1,118 @@
+@startuml architecture-overview
+!theme plain
+title Chaos Monkey — Architecture Overview
+
+skinparam backgroundColor #FAFAFA
+skinparam roundcorner 8
+skinparam arrow {
+    Color #555555
+    FontSize 11
+}
+skinparam note {
+    BackgroundColor #FFFDE7
+    BorderColor #F9A825
+}
+skinparam rectangle {
+    BorderColor #555555
+}
+skinparam package {
+    BorderColor #AAAAAA
+    FontColor #333333
+    BackgroundColor #F5F5F5
+}
+
+actor "QA Engineer" as qa
+
+package "CLI Layer" #E8F0F8 {
+    rectangle "@ShellComponent\nChaosMonkeyCLI\n\nRegisters fuzz command.\nParses --url, --spec,\n--output, --timeout,\n--flag-only, --dry-run." as cli #3D6B8E
+}
+
+package "Config Layer" #EEF0EE {
+    rectangle "@ConfigurationProperties\nFuzzConfig\n\nHolds all runtime config.\nInjected into all services\nvia Spring DI." as config #555555
+}
+
+package "Parse Layer" #EEEEF8 {
+    rectangle "@Service\nOpenApiParser\n\nFetches OpenAPI 3.x spec.\nExtracts endpoints, fields,\ntypes and constraints.\nProduces List<FuzzTarget>." as parser #4A4A8E
+}
+
+package "Fuzz Layer" #F0EEEE {
+    rectangle "@Service\nFuzzPayloadGenerator\n\nGenerates schema-aware\npayloads per field type\nand constraint.\nProduces List<FuzzCase>." as generator #8E4A4A
+
+    rectangle "@Component\nFuzzPayloadLibrary\n\nLoads fuzz-strings.json.\nStatic payload fallback\nwhen no spec provided." as library #8E4A4A
+}
+
+package "Run Layer" #EEFAEE {
+    rectangle "@Service\nFuzzRunner\n\nFires HTTP requests\nvia REST Assured.\nCaptures status, body,\nheaders, duration." as runner #4A8E4A
+
+    rectangle "@Component\nResponseAnalyser\n\nApplies detection rules.\nAttaches flag strings\nto each FuzzResult." as analyser #4A8E4A
+}
+
+package "Report Layer" #F8F0E8 {
+    rectangle "@Service\nAllureReporter\n\nWrites Allure TestResult\nper FuzzResult.\nAttaches response bodies\nto flagged results." as reporter #8E6B3D
+}
+
+package "Model Layer" #F5F5F5 {
+    rectangle "FuzzTarget\nFuzzCase\nFuzzResult\nFieldSchema\nFieldConstraints\n\n[Java 21 Records]\nImmutable data carriers.\nPassed between layers." as model #777777
+}
+
+database "fuzz-strings.json\n[payloads/]" as payloads #6B8E6B
+database "allure-results/\n[output dir]" as results #6B8E6B
+rectangle "OpenAPI Spec\n[remote URL or local file]" as spec #3D6B8E
+rectangle "Target REST API\n[Petstore v3 / any]" as api #3D6B8E
+rectangle "Allure Report\n[HTML — browser]" as report #6B8E6B
+
+' QA Engineer entry point
+qa --> cli : "java -jar chaos-monkey.jar\n--url ... --spec ..."
+
+' Config flows through spring DI
+cli --> config : "builds"
+config ..> parser : "<<injected>>"
+config ..> runner : "<<injected>>"
+config ..> reporter : "<<injected>>"
+
+' Pipeline flow
+cli --> parser : "1. parse()"
+parser --> spec : "fetch spec"
+parser --> model : "produces FuzzTarget"
+
+cli --> generator : "2. generate()"
+generator --> library : "load static payloads"
+library --> payloads : "reads"
+generator --> model : "produces FuzzCase"
+
+cli --> runner : "3. run()"
+runner --> api : "HTTP requests\n(REST Assured)"
+api --> runner : "responses"
+runner --> analyser : "analyse each response"
+analyser --> model : "produces flagged FuzzResult"
+
+cli --> reporter : "4. write()"
+reporter --> results : "writes result files"
+
+results --> report : "allure serve"
+qa --> report : "reviews findings"
+
+note bottom of model
+  All data passed between
+  layers as Java 21 Records.
+  Immutable. No shared state.
+end note
+
+note right of analyser
+  Flags: SERVER_ERROR
+  STACK_TRACE_LEAKED
+  DB_ERROR_EXPOSED
+  UNEXPECTED_SUCCESS
+  VALIDATION_MISSING
+  SLOW_RESPONSE
+  EMPTY_SUCCESS_BODY
+end note
+
+note right of cli
+  Spring Boot application.
+  Spring DI wires all services.
+  Spring Shell handles CLI.
+  No web server started.
+end note
+
+@enduml
