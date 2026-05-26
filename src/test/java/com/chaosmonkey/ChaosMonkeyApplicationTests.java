@@ -1,4 +1,4 @@
-package chaos_monkey;
+package com.chaosmonkey;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

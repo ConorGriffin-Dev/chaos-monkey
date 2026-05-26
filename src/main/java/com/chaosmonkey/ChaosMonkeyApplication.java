@@ -1,4 +1,4 @@
-package chaos_monkey;
+package com.chaosmonkey;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

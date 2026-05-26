@@ -1,71 +1,230 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.14</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>3.3.5</version>
+		<relativePath/>
 	</parent>
+
 	<groupId>com.chaosmonkey</groupId>
 	<artifactId>chaos-monkey</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>chaos-monkey</name>
+	<description>Automated REST API fuzzer — v0.1 static fuzzer</description>
+
+	<!-- ═══════════════════════════════════════════════════════
+         Properties
+         ═══════════════════════════════════════════════════════ -->
 	<properties>
 		<java.version>21</java.version>
-		<spring-shell.version>3.4.2</spring-shell.version>
+		<rest-assured.version>5.4.0</rest-assured.version>
+		<assertj.version>3.25.3</assertj.version>
+		<mockito.version>5.11.0</mockito.version>
 	</properties>
+
+	<!-- ═══════════════════════════════════════════════════════
+         Dependencies
+         ═══════════════════════════════════════════════════════ -->
 	<dependencies>
+
+		<!-- ── Spring Shell ──────────────────────────────────
+             CLI argument parsing and command registration.
+             spring-shell-starter brings in spring-shell-core,
+             spring-shell-autoconfigure, and JLine terminal
+             handling. Spring Boot auto-configures the shell.
+        -->
 		<dependency>
 			<groupId>org.springframework.shell</groupId>
 			<artifactId>spring-shell-starter</artifactId>
+			<version>3.3.0</version>
 		</dependency>
 
+		<!-- ── REST Assured ──────────────────────────────────
+             HTTP execution and response extraction for the
+             FuzzRunner. The spring-mock-mvc module is NOT
+             included — we are hitting real external APIs,
+             not mocking a Spring context.
+             jackson-databind is excluded from rest-assured
+             because Spring Boot manages Jackson via its own
+             BOM — avoids version conflicts.
+        -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${rest-assured.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- ── Jackson ───────────────────────────────────────
+             JSON deserialisation for fuzz-strings.json
+             (FuzzPayloadLibrary) and any API response bodies
+             that need parsing. Managed by Spring Boot BOM —
+             no explicit version needed here.
+        -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+
+		<!-- ── Lombok ────────────────────────────────────────
+             Permitted on service and component classes only.
+             NOT used on model records (FuzzConfig, FuzzResult,
+             FuzzTarget, FieldSchema, FieldConstraints, FuzzCase).
+             Scope: provided — compile-time only, not in JAR.
+        -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- ════════════════════════════════════════════════
+             Test dependencies
+             ════════════════════════════════════════════════ -->
+
+		<!-- ── Spring Boot Test ──────────────────────────────
+             Brings in JUnit 5 (junit-jupiter), Mockito, and
+             Spring test infrastructure in one dependency.
+             Scope: test.
+        -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- ── Spring Shell Test ─────────────────────────────
+             Test utilities for Spring Shell commands —
+             lets us invoke @ShellMethod commands in tests
+             without a real terminal.
+        -->
 		<dependency>
 			<groupId>org.springframework.shell</groupId>
 			<artifactId>spring-shell-starter-test</artifactId>
+			<version>3.3.0</version>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.shell</groupId>
-				<artifactId>spring-shell-dependencies</artifactId>
-				<version>${spring-shell.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
+		<!-- ── AssertJ ───────────────────────────────────────
+             Fluent assertions. spring-boot-starter-test
+             already includes AssertJ, but the version it
+             pulls may lag behind. Declaring it explicitly
+             here pins it to the version specified in
+             properties and ensures AssertJ is always
+             available regardless of Boot version changes.
+        -->
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>${assertj.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- ── Mockito ───────────────────────────────────────
+             spring-boot-starter-test already includes
+             mockito-core, but mockito-junit-jupiter is
+             needed explicitly to enable @ExtendWith
+             (MockitoExtension.class) in unit tests that do
+             NOT use Spring context (the majority of our
+             unit tests).
+        -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<!-- ═══════════════════════════════════════════════════════
+         Build
+         ═══════════════════════════════════════════════════════ -->
 	<build>
 		<plugins>
+
+			<!-- ── Spring Boot Maven Plugin ──────────────────
+                 Packages the application as an executable
+                 fat JAR (chaos-monkey.jar).
+                 Lombok is excluded from the final JAR —
+                 it is compile-time only.
+            -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+					<finalName>chaos-monkey</finalName>
+				</configuration>
 			</plugin>
+
+			<!-- ── Maven Surefire Plugin ─────────────────────
+                 Runs JUnit 5 tests on every build.
+                 Integration tests tagged @Tag("integration")
+                 are excluded from the standard build.
+                 Run integration tests explicitly with:
+                   mvn test -Dgroups="integration"
+                 or via a dedicated Maven profile (see below).
+            -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.2.5</version>
+				<configuration>
+					<excludedGroups>integration</excludedGroups>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
+
+	<!-- ═══════════════════════════════════════════════════════
+         Profiles
+         ═══════════════════════════════════════════════════════ -->
+	<profiles>
+
+		<!-- ── integration-tests profile ─────────────────────
+             Run with: mvn test -Pintegration-tests
+             Overrides Surefire configuration to include
+             @Tag("integration") tests and exclude nothing.
+             Used for full pipeline runs against Petstore.
+        -->
+		<profile>
+			<id>integration-tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.2.5</version>
+						<configuration>
+							<excludedGroups/>
+							<groups>integration</groups>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
 
 </project>
