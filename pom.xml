@@ -149,6 +149,17 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- ── Swagger Parser ─────────────────────────────────────────────────
+     Reads and deserialises OpenAPI 3.x specifications (JSON and YAML).
+     Handles remote URLs, local file paths, and $ref resolution.
+     Used by OpenApiParser to produce FuzzTarget objects from a spec.
+-->
+		<dependency>
+			<groupId>io.swagger.parser.v3</groupId>
+			<artifactId>swagger-parser</artifactId>
+			<version>2.1.22</version>
+		</dependency>
+
 	</dependencies>
 
 	<!-- ═══════════════════════════════════════════════════════
