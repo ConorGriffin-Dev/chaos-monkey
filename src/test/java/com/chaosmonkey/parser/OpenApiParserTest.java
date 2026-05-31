@@ -252,4 +252,22 @@ class OpenApiParserTest {
         assertThat(targets).allSatisfy(target ->
                 assertThat(target.fields()).isNotEmpty());
     }
+
+    @Test
+    void parse_validSpec_queryParamLocationIsQuery() {
+        List<FuzzTarget> targets = parser.parse(specPath);
+        FuzzTarget findByStatus = targets.stream()
+                .filter(t -> t.path().equals("/pet/findByStatus"))
+                .findFirst().orElseThrow();
+        assertThat(findByStatus.fields().get("status").in()).isEqualTo("query");
+    }
+
+    @Test
+    void parse_validSpec_pathParamLocationIsPath() {
+        List<FuzzTarget> targets = parser.parse(specPath);
+        FuzzTarget getPet = targets.stream()
+                .filter(t -> t.method().equals("GET") && t.path().equals("/pet/{petId}"))
+                .findFirst().orElseThrow();
+        assertThat(getPet.fields().get("petId").in()).isEqualTo("path");
+    }
 }

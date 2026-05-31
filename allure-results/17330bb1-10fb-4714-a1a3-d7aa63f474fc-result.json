@@ -1,0 +1,15 @@
+{
+  "uuid" : "17330bb1-10fb-4714-a1a3-d7aa63f474fc",
+  "name" : "POST https://petstore3.swagger.io/api/v3/pet/1/uploadImage | additionalMetadata | \u0000",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/pet/1/uploadImage",
+    "name" : "suite"
+  }, {
+    "value" : "POST https://petstore3.swagger.io/api/v3/pet/1/uploadImage",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148007379,
+  "stop" : 1780148007727
+}

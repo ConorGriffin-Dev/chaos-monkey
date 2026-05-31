@@ -23,16 +23,15 @@ class FuzzPayloadGeneratorTest {
     // ── Helper ────────────────────────────────────────────────────────────────
 
     private FieldSchema schema(String type) {
-        return new FieldSchema(type, new FieldConstraints(
+        return new FieldSchema(type, "body", new FieldConstraints(
                 null, null, null, null, null, null));
     }
 
     private FieldSchema schema(String type, Integer min, Integer max,
                                Integer minLen, Integer maxLen) {
-        return new FieldSchema(type, new FieldConstraints(
+        return new FieldSchema(type, "body", new FieldConstraints(
                 min, max, minLen, maxLen, null, null));
     }
-
     // ── Integer payloads ──────────────────────────────────────────────────────
 
     // FG01
@@ -219,7 +218,7 @@ class FuzzPayloadGeneratorTest {
 
     @Test
     void generateForSchema_enumConstraint_invalidEnumValueIncluded() {
-        FieldSchema schema = new FieldSchema("string",
+        FieldSchema schema = new FieldSchema("string", "body",
                 new FieldConstraints(null, null, null, null, null,
                         List.of("available", "pending", "sold")));
         List<Object> payloads = generator.generateForSchema(schema);
@@ -230,7 +229,7 @@ class FuzzPayloadGeneratorTest {
 
     @Test
     void generateForSchema_nonNullableField_nullPayloadIncluded() {
-        FieldSchema schema = new FieldSchema("string",
+        FieldSchema schema = new FieldSchema("string", "body",
                 new FieldConstraints(null, null, null, null, false, null));
         List<Object> payloads = generator.generateForSchema(schema);
         assertThat(payloads).containsNull();

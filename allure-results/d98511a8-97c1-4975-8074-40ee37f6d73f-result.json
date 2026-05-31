@@ -1,0 +1,22 @@
+{
+  "uuid" : "d98511a8-97c1-4975-8074-40ee37f6d73f",
+  "name" : "GET https://petstore3.swagger.io/api/v3/store/inventory | body | ..\\..\\..\\windows\\system32\\cmd.exe",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "https://petstore3.swagger.io/api/v3/store/inventory",
+    "name" : "suite"
+  }, {
+    "value" : "GET https://petstore3.swagger.io/api/v3/store/inventory",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "d98511a8-97c1-4975-8074-40ee37f6d73f-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780148319723,
+  "stop" : 1780148320042
+}

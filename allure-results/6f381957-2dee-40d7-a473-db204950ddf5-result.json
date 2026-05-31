@@ -1,0 +1,15 @@
+{
+  "uuid" : "6f381957-2dee-40d7-a473-db204950ddf5",
+  "name" : "GET https://petstore3.swagger.io/api/v3/user/%F0%9D%95%B3%F0%9D%96%8A%F0%9D%96%91%F0%9D%96%91%F0%9D%96%94 | username | \uD835\uDD73\uD835\uDD8A\uD835\uDD91\uD835\uDD91\uD835\uDD94",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/user/%F0%9D%95%B3%F0%9D%96%8A%F0%9D%96%91%F0%9D%96%91%F0%9D%96%94",
+    "name" : "suite"
+  }, {
+    "value" : "GET https://petstore3.swagger.io/api/v3/user/%F0%9D%95%B3%F0%9D%96%8A%F0%9D%96%91%F0%9D%96%91%F0%9D%96%94",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148319741,
+  "stop" : 1780148319807
+}

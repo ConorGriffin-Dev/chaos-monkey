@@ -1,0 +1,22 @@
+{
+  "uuid" : "568480c1-4b34-4890-b8ac-bce7f4734def",
+  "name" : "DELETE https://petstore3.swagger.io/api/v3/store/order/-2147483648 | orderId | -2147483648",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "https://petstore3.swagger.io/api/v3/store/order/-2147483648",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE https://petstore3.swagger.io/api/v3/store/order/-2147483648",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "type" : "text/plain",
+    "source" : "568480c1-4b34-4890-b8ac-bce7f4734def-attachment.txt"
+  } ],
+  "start" : 1780148007396,
+  "stop" : 1780148007729
+}

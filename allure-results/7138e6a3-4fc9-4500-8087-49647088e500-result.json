@@ -1,0 +1,15 @@
+{
+  "uuid" : "7138e6a3-4fc9-4500-8087-49647088e500",
+  "name" : "GET https://petstore3.swagger.io/api/v3/user/login | username | false",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/user/login",
+    "name" : "suite"
+  }, {
+    "value" : "GET https://petstore3.swagger.io/api/v3/user/login",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148007407,
+  "stop" : 1780148007482
+}

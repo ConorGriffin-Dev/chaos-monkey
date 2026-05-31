@@ -1,0 +1,15 @@
+{
+  "uuid" : "0c54f344-cce5-4ac6-b08f-e503c93a2263",
+  "name" : "PUT https://petstore3.swagger.io/api/v3/user/test | firstName | 0",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/user/test",
+    "name" : "suite"
+  }, {
+    "value" : "PUT https://petstore3.swagger.io/api/v3/user/test",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148007408,
+  "stop" : 1780148007532
+}

@@ -1,0 +1,22 @@
+{
+  "uuid" : "b4c92303-a35b-481a-b51e-ef19a7ebeb6e",
+  "name" : "DELETE https://petstore3.swagger.io/api/v3/user/%3Cimg+src%3Dx+onerror%3Dalert%281%29%3E | username | <img src=x onerror=alert(1)>",
+  "status" : "failed",
+  "labels" : [ {
+    "name" : "tag",
+    "value" : "SERVER_ERROR"
+  }, {
+    "name" : "suite",
+    "value" : "https://petstore3.swagger.io/api/v3/user/%3Cimg+src%3Dx+onerror%3Dalert%281%29%3E"
+  }, {
+    "name" : "feature",
+    "value" : "DELETE https://petstore3.swagger.io/api/v3/user/%3Cimg+src%3Dx+onerror%3Dalert%281%29%3E"
+  } ],
+  "attachments" : [ {
+    "type" : "text/plain",
+    "source" : "b4c92303-a35b-481a-b51e-ef19a7ebeb6e-attachment.txt",
+    "name" : "Response Body"
+  } ],
+  "start" : 1780146414162,
+  "stop" : 1780146414471
+}

@@ -1,0 +1,22 @@
+{
+  "uuid" : "44c8b4ff-2afe-4af5-89d9-6e9571553e7e",
+  "name" : "GET https://petstore3.swagger.io/api/v3/user/%F0%9D%95%B3%F0%9D%96%8A%F0%9D%96%91%F0%9D%96%91%F0%9D%96%94 | username | \uD835\uDD73\uD835\uDD8A\uD835\uDD91\uD835\uDD91\uD835\uDD94",
+  "status" : "failed",
+  "labels" : [ {
+    "name" : "tag",
+    "value" : "SERVER_ERROR"
+  }, {
+    "name" : "suite",
+    "value" : "https://petstore3.swagger.io/api/v3/user/%F0%9D%95%B3%F0%9D%96%8A%F0%9D%96%91%F0%9D%96%91%F0%9D%96%94"
+  }, {
+    "name" : "feature",
+    "value" : "GET https://petstore3.swagger.io/api/v3/user/%F0%9D%95%B3%F0%9D%96%8A%F0%9D%96%91%F0%9D%96%91%F0%9D%96%94"
+  } ],
+  "attachments" : [ {
+    "type" : "text/plain",
+    "source" : "44c8b4ff-2afe-4af5-89d9-6e9571553e7e-attachment.txt",
+    "name" : "Response Body"
+  } ],
+  "start" : 1780146414154,
+  "stop" : 1780146414462
+}

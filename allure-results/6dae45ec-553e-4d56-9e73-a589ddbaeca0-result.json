@@ -1,0 +1,22 @@
+{
+  "uuid" : "6dae45ec-553e-4d56-9e73-a589ddbaeca0",
+  "name" : "POST https://petstore3.swagger.io/api/v3/store/order | id | -2147483648",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "https://petstore3.swagger.io/api/v3/store/order",
+    "name" : "suite"
+  }, {
+    "value" : "POST https://petstore3.swagger.io/api/v3/store/order",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "type" : "text/plain",
+    "source" : "6dae45ec-553e-4d56-9e73-a589ddbaeca0-attachment.txt"
+  } ],
+  "start" : 1780148007386,
+  "stop" : 1780148007706
+}

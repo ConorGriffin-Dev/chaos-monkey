@@ -1,0 +1,15 @@
+{
+  "uuid" : "f6ca4661-be12-4284-873b-fb88e3fdb488",
+  "name" : "DELETE https://petstore3.swagger.io/api/v3/user/..%5C..%5C..%5Cwindows%5Csystem32%5Ccmd.exe | username | ..\\..\\..\\windows\\system32\\cmd.exe",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/user/..%5C..%5C..%5Cwindows%5Csystem32%5Ccmd.exe",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE https://petstore3.swagger.io/api/v3/user/..%5C..%5C..%5Cwindows%5Csystem32%5Ccmd.exe",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148319745,
+  "stop" : 1780148319807
+}

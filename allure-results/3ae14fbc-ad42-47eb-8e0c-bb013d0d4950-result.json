@@ -1,0 +1,15 @@
+{
+  "uuid" : "3ae14fbc-ad42-47eb-8e0c-bb013d0d4950",
+  "name" : "GET https://petstore3.swagger.io/api/v3/user/login | username | ..\\..\\..\\windows\\system32\\cmd.exe",
+  "status" : "passed",
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "https://petstore3.swagger.io/api/v3/user/login"
+  }, {
+    "name" : "feature",
+    "value" : "GET https://petstore3.swagger.io/api/v3/user/login"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780146414152,
+  "stop" : 1780146414468
+}

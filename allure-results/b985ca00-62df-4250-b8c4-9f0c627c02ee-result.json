@@ -1,0 +1,22 @@
+{
+  "uuid" : "b985ca00-62df-4250-b8c4-9f0c627c02ee",
+  "name" : "PUT https://petstore3.swagger.io/api/v3/pet | id | -9999999999",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "https://petstore3.swagger.io/api/v3/pet",
+    "name" : "suite"
+  }, {
+    "value" : "PUT https://petstore3.swagger.io/api/v3/pet",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "type" : "text/plain",
+    "source" : "b985ca00-62df-4250-b8c4-9f0c627c02ee-attachment.txt"
+  } ],
+  "start" : 1780148007356,
+  "stop" : 1780148007685
+}

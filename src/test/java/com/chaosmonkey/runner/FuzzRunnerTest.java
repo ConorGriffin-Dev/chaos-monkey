@@ -17,11 +17,13 @@ class FuzzRunnerTest {
     @BeforeEach
     void setUp() {
         fuzzRunner = new FuzzRunner();
-        config = new FuzzConfig(
+        config = new FuzzConfig(            // ← was "FuzzConfig config ="
                 "https://jsonplaceholder.typicode.com/posts",
                 null,
-                FuzzConfig.DEFAULT_OUTPUT_DIR,
-                FuzzConfig.DEFAULT_TIMEOUT_MS
+                "./allure-results",
+                10000,
+                false,
+                false
         );
     }
 

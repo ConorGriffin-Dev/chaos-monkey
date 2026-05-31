@@ -1,0 +1,15 @@
+{
+  "uuid" : "a68f78a0-41e3-4469-96ed-ada1516d2cd8",
+  "name" : "GET https://petstore3.swagger.io/api/v3/user/..%5C..%5C..%5Cwindows%5Csystem32%5Ccmd.exe | username | ..\\..\\..\\windows\\system32\\cmd.exe",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/user/..%5C..%5C..%5Cwindows%5Csystem32%5Ccmd.exe",
+    "name" : "suite"
+  }, {
+    "value" : "GET https://petstore3.swagger.io/api/v3/user/..%5C..%5C..%5Cwindows%5Csystem32%5Ccmd.exe",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148007408,
+  "stop" : 1780148007471
+}

@@ -1,0 +1,22 @@
+{
+  "uuid" : "96a5548b-046c-4502-ab3d-1d3fd689cb70",
+  "name" : "DELETE https://petstore3.swagger.io/api/v3/pet/1 | api_key | ' OR '1'='1",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "https://petstore3.swagger.io/api/v3/pet/1",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE https://petstore3.swagger.io/api/v3/pet/1",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "type" : "text/plain",
+    "source" : "96a5548b-046c-4502-ab3d-1d3fd689cb70-attachment.txt"
+  } ],
+  "start" : 1780148007376,
+  "stop" : 1780148007701
+}

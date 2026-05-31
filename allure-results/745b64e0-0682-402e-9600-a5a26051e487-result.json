@@ -1,0 +1,15 @@
+{
+  "uuid" : "745b64e0-0682-402e-9600-a5a26051e487",
+  "name" : "DELETE https://petstore3.swagger.io/api/v3/user/%27%3B+DROP+TABLE+users%3B-- | username | '; DROP TABLE users;--",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/user/%27%3B+DROP+TABLE+users%3B--",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE https://petstore3.swagger.io/api/v3/user/%27%3B+DROP+TABLE+users%3B--",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148319745,
+  "stop" : 1780148319807
+}

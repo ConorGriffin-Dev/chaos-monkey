@@ -1,0 +1,15 @@
+{
+  "uuid" : "4a0e377b-c9cb-4ae2-b150-65ecd76d2ec3",
+  "name" : "DELETE https://petstore3.swagger.io/api/v3/store/order/ | orderId | null",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/store/order/",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE https://petstore3.swagger.io/api/v3/store/order/",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148319728,
+  "stop" : 1780148320043
+}

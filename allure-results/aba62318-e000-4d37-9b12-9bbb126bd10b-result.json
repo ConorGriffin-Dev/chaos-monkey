@@ -1,0 +1,15 @@
+{
+  "uuid" : "aba62318-e000-4d37-9b12-9bbb126bd10b",
+  "name" : "DELETE https://petstore3.swagger.io/api/v3/pet/not_an_int | petId | not_an_int",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/pet/not_an_int",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE https://petstore3.swagger.io/api/v3/pet/not_an_int",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148319720,
+  "stop" : 1780148320034
+}

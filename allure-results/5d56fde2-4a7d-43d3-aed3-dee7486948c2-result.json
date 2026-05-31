@@ -1,0 +1,15 @@
+{
+  "uuid" : "5d56fde2-4a7d-43d3-aed3-dee7486948c2",
+  "name" : "DELETE https://petstore3.swagger.io/api/v3/user/%F0%9D%95%B3%F0%9D%96%8A%F0%9D%96%91%F0%9D%96%91%F0%9D%96%94 | username | \uD835\uDD73\uD835\uDD8A\uD835\uDD91\uD835\uDD91\uD835\uDD94",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/user/%F0%9D%95%B3%F0%9D%96%8A%F0%9D%96%91%F0%9D%96%91%F0%9D%96%94",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE https://petstore3.swagger.io/api/v3/user/%F0%9D%95%B3%F0%9D%96%8A%F0%9D%96%91%F0%9D%96%91%F0%9D%96%94",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148007416,
+  "stop" : 1780148007497
+}

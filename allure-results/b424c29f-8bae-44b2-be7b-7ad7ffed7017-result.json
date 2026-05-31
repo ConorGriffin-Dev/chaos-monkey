@@ -1,0 +1,15 @@
+{
+  "uuid" : "b424c29f-8bae-44b2-be7b-7ad7ffed7017",
+  "name" : "GET https://petstore3.swagger.io/api/v3/user/login | username | '; DROP TABLE users;--",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/user/login",
+    "name" : "suite"
+  }, {
+    "value" : "GET https://petstore3.swagger.io/api/v3/user/login",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148319740,
+  "stop" : 1780148319805
+}

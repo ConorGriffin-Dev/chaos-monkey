@@ -3,6 +3,7 @@ package com.chaosmonkey.runner;
 import com.chaosmonkey.model.FuzzCase;
 import com.chaosmonkey.model.FuzzConfig;
 import com.chaosmonkey.model.FuzzResult;
+import com.chaosmonkey.model.FieldSchema;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -10,9 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Executes fuzz cases against a target API using REST Assured.
@@ -23,9 +28,15 @@ import java.util.Map;
  *       with a generic {"data": payload} wrapper.
  *
  * v0.2: accepts a list of FuzzCases. Each case carries the target
- *       endpoint, HTTP method, field name, and payload. Requests are
- *       built correctly per method — GET/DELETE use query params,
- *       POST/PUT/PATCH use a JSON body with the actual field name.
+ *       endpoint, HTTP method, field name, and payload.
+ *
+ * v0.3: requests are built per the field's declared location:
+ *       - path   → payload substituted into the {param} segment
+ *       - header → payload sent as an HTTP header
+ *       - query  → payload sent as a query parameter
+ *       - body   → payload sent in the JSON body
+ *       Non-fuzzed path params get a type-aware placeholder (1 for
+ *       integer/number, "test" otherwise) so the URL resolves.
  *
  * Also retains the v0.1 static mode signature for backwards
  * compatibility with ChaosMonkeyCLI's --spec-less fallback.
@@ -35,18 +46,10 @@ public class FuzzRunner {
 
     private static final Logger log = LoggerFactory.getLogger(FuzzRunner.class);
 
-    // ── v0.2 — schema-aware mode ──────────────────────────────────────────────
+    private static final Pattern PATH_PARAM = Pattern.compile("\\{([^}]+)\\}");
 
-    /**
-     * Executes a list of FuzzCases against the target API.
-     * Each FuzzCase is fired as the correct HTTP method with the
-     * payload targeting the correct field.
-     *
-     * @param cases   list of FuzzCases produced by FuzzPayloadGenerator
-     * @param baseUrl base URL of the target API
-     * @param config  runtime config — used for timeout
-     * @return        one FuzzResult per FuzzCase, flags empty (filled by ResponseAnalyser)
-     */
+    // ── v0.2+ — schema-aware mode ─────────────────────────────────────────────
+
     public List<FuzzResult> runCases(List<FuzzCase> cases, String baseUrl, FuzzConfig config) {
         List<FuzzResult> results = new ArrayList<>();
 
@@ -66,14 +69,21 @@ public class FuzzRunner {
 
     /**
      * Fires a single FuzzCase and captures the response as a FuzzResult.
-     * Builds the request correctly based on the HTTP method declared
-     * in the FuzzTarget.
+     * Routes the fuzzed field to path / header / query / body based on
+     * its declared location, resolving any other {pathParam} segments.
      */
     private FuzzResult fireCase(FuzzCase fuzzCase, String baseUrl, FuzzConfig config) {
-        String fullUrl = baseUrl + fuzzCase.target().path();
+        String rawPath = fuzzCase.target().path();
         String method = fuzzCase.target().method();
         String fieldName = fuzzCase.fieldName();
         Object payload = fuzzCase.payload();
+
+        // Where does the fuzzed field live? path / query / header / body.
+        String fieldIn = locationOf(fuzzCase, fieldName, rawPath);
+        boolean fieldIsPathParam = "path".equals(fieldIn);
+
+        String resolvedPath = resolvePath(rawPath, fuzzCase, fieldName, payload);
+        String fullUrl = baseUrl + resolvedPath;
 
         long start = System.currentTimeMillis();
 
@@ -88,30 +98,34 @@ public class FuzzRunner {
                                     .setParam("http.connection.timeout", config.timeoutMs())
                                     .setParam("http.socket.timeout", config.timeoutMs())));
 
-            Response response = switch (method) {
-                case "GET", "DELETE" ->
-                        request
-                                .queryParam(fieldName, payload == null ? "" : payload.toString())
-                                .when()
-                                .request(method, "")
-                                .then()
-                                .extract()
-                                .response();
+            // Route the fuzzed field to the correct place, unless it already went into the path.
+            if (!fieldIsPathParam) {
+                switch (fieldIn) {
+                    case "header" ->
+                            request.header(fieldName, payload == null ? "" : payload.toString());
+                    case "query" ->
+                            request.queryParam(fieldName, payload == null ? "" : payload.toString());
+                    default -> { // "body" — and anything unrecognised
+                        if (method.equals("GET") || method.equals("DELETE")) {
+                            request.queryParam(fieldName, payload == null ? "" : payload.toString());
+                        } else {
+                            request.body(Map.of(fieldName, payload == null ? "" : payload));
+                        }
+                    }
+                }
+            }
 
-                default -> // POST, PUT, PATCH
-                        request
-                                .body(Map.of(fieldName, payload == null ? "" : payload))
-                                .when()
-                                .request(method, "")
-                                .then()
-                                .extract()
-                                .response();
-            };
+            Response response = request
+                    .when()
+                    .request(method, "")
+                    .then()
+                    .extract()
+                    .response();
 
             long duration = System.currentTimeMillis() - start;
 
-            log.debug("{} {} | field: {} | payload: {} | status: {} | {}ms",
-                    method, fullUrl, fieldName, payload,
+            log.debug("{} {} | field: {} ({}) | payload: {} | status: {} | {}ms",
+                    method, fullUrl, fieldName, fieldIn, payload,
                     response.statusCode(), duration);
 
             return new FuzzResult(
@@ -143,13 +157,72 @@ public class FuzzRunner {
         }
     }
 
-    // ── v0.1 — static mode (retained for --spec-less fallback) ───────────────
+    /**
+     * Resolves where a fuzzed field lives: path / query / header / body.
+     * Prefers the schema's declared location; falls back to detecting a
+     * path placeholder, then to "body".
+     */
+    private String locationOf(FuzzCase fuzzCase, String fieldName, String rawPath) {
+        Map<String, FieldSchema> fields = fuzzCase.target().fields();
+        FieldSchema schema = fields == null ? null : fields.get(fieldName);
+        if (schema != null && schema.in() != null) {
+            return schema.in();
+        }
+        if (rawPath.contains("{" + fieldName + "}")) {
+            return "path";
+        }
+        return "body";
+    }
 
     /**
-     * v0.1 static fuzz mode — fires a flat list of payloads at a single
-     * URL as POST requests with a generic {"data": payload} wrapper.
-     * Retained for use when no --spec argument is provided.
+     * Replaces every {pathParam} segment in the path.
+     * - If the segment matches the fuzzed field, the fuzz payload is substituted.
+     * - Otherwise a type-aware placeholder is used (1 for integer/number, "test"
+     *   otherwise) so the URL resolves and the actual fuzz target is exercised.
      */
+    private String resolvePath(String rawPath, FuzzCase fuzzCase, String fuzzedField, Object payload) {
+        Matcher m = PATH_PARAM.matcher(rawPath);
+        StringBuilder out = new StringBuilder();
+
+        while (m.find()) {
+            String paramName = m.group(1);
+            String replacement;
+
+            if (paramName.equals(fuzzedField)) {
+                replacement = payload == null ? "" : payload.toString();
+            } else {
+                replacement = placeholderFor(paramName, fuzzCase);
+            }
+
+            m.appendReplacement(out, Matcher.quoteReplacement(urlEncode(replacement)));
+        }
+        m.appendTail(out);
+        return out.toString();
+    }
+
+    /**
+     * Type-aware placeholder for a non-fuzzed path param: "1" for integer/number
+     * declared types, "test" otherwise. Falls back to "1" if the type is unknown.
+     */
+    private String placeholderFor(String paramName, FuzzCase fuzzCase) {
+        Map<String, FieldSchema> fields = fuzzCase.target().fields();
+        FieldSchema schema = fields == null ? null : fields.get(paramName);
+        if (schema != null && schema.type() != null) {
+            String type = schema.type();
+            if ("integer".equals(type) || "number".equals(type)) {
+                return "1";
+            }
+            return "test";
+        }
+        return "1";
+    }
+
+    private String urlEncode(String s) {
+        return URLEncoder.encode(s, StandardCharsets.UTF_8);
+    }
+
+    // ── v0.1 — static mode (retained for --spec-less fallback) ───────────────
+
     public List<FuzzResult> run(String targetUrl, List<Object> payloads, FuzzConfig config) {
         List<FuzzResult> results = new ArrayList<>();
 

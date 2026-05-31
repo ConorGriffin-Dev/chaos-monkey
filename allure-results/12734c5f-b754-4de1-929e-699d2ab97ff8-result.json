@@ -1,0 +1,15 @@
+{
+  "uuid" : "12734c5f-b754-4de1-929e-699d2ab97ff8",
+  "name" : "POST https://petstore3.swagger.io/api/v3/user/createWithList | body | undefined",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/user/createWithList",
+    "name" : "suite"
+  }, {
+    "value" : "POST https://petstore3.swagger.io/api/v3/user/createWithList",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148007406,
+  "stop" : 1780148007497
+}

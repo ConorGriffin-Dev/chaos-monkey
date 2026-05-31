@@ -1,0 +1,15 @@
+{
+  "uuid" : "187485fb-37fc-4886-9bc3-d2322a006e89",
+  "name" : "POST https://petstore3.swagger.io/api/v3/store/order | shipDate | \uD83D\uDD25\uD83D\uDC80\uD83C\uDFAF",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/store/order",
+    "name" : "suite"
+  }, {
+    "value" : "POST https://petstore3.swagger.io/api/v3/store/order",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148007389,
+  "stop" : 1780148007716
+}

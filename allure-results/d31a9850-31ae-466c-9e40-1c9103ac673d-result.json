@@ -1,0 +1,22 @@
+{
+  "uuid" : "d31a9850-31ae-466c-9e40-1c9103ac673d",
+  "name" : "GET https://petstore3.swagger.io/api/v3/pet/-9999999999 | petId | -9999999999",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "https://petstore3.swagger.io/api/v3/pet/-9999999999",
+    "name" : "suite"
+  }, {
+    "value" : "GET https://petstore3.swagger.io/api/v3/pet/-9999999999",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "d31a9850-31ae-466c-9e40-1c9103ac673d-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780148319717,
+  "stop" : 1780148320040
+}

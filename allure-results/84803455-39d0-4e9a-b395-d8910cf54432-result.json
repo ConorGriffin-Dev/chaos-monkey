@@ -1,0 +1,15 @@
+{
+  "uuid" : "84803455-39d0-4e9a-b395-d8910cf54432",
+  "name" : "DELETE https://petstore3.swagger.io/api/v3/user/-1 | username | -1",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/user/-1",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE https://petstore3.swagger.io/api/v3/user/-1",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148319745,
+  "stop" : 1780148319798
+}

@@ -1,0 +1,15 @@
+{
+  "uuid" : "fe780f45-c474-4ff0-8f63-8abffdae0e59",
+  "name" : "GET https://petstore3.swagger.io/api/v3/pet/findByStatus | status | 0",
+  "status" : "passed",
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "https://petstore3.swagger.io/api/v3/pet/findByStatus"
+  }, {
+    "name" : "feature",
+    "value" : "GET https://petstore3.swagger.io/api/v3/pet/findByStatus"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780146414127,
+  "stop" : 1780146414460
+}

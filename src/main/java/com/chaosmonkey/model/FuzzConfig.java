@@ -12,7 +12,9 @@ public record FuzzConfig(
         String baseUrl,
         String specLocation,
         String outputDir,
-        int timeoutMs
+        int timeoutMs,
+        boolean flagOnly,
+        boolean dryRun
 ) {
     public static final int DEFAULT_TIMEOUT_MS = 10_000;
     public static final String DEFAULT_OUTPUT_DIR = "./allure-results";

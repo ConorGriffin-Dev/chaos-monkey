@@ -1,0 +1,15 @@
+{
+  "uuid" : "df404203-4517-4f89-b8df-cc9988659e6f",
+  "name" : "GET https://petstore3.swagger.io/api/v3/pet/findByStatus | status | NOT_A_VALID_ENUM_VALUE",
+  "status" : "passed",
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "https://petstore3.swagger.io/api/v3/pet/findByStatus"
+  }, {
+    "name" : "feature",
+    "value" : "GET https://petstore3.swagger.io/api/v3/pet/findByStatus"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780146414127,
+  "stop" : 1780146414435
+}

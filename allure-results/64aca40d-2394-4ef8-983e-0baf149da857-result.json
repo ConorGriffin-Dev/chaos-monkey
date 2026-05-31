@@ -1,0 +1,15 @@
+{
+  "uuid" : "64aca40d-2394-4ef8-983e-0baf149da857",
+  "name" : "DELETE https://petstore3.swagger.io/api/v3/user/..%2F..%2F..%2Fetc%2Fpasswd | username | ../../../etc/passwd",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/user/..%2F..%2F..%2Fetc%2Fpasswd",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE https://petstore3.swagger.io/api/v3/user/..%2F..%2F..%2Fetc%2Fpasswd",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148319745,
+  "stop" : 1780148319807
+}

@@ -1,0 +1,15 @@
+{
+  "uuid" : "00a1bcc4-3e19-4fd2-a89c-672140708a7e",
+  "name" : "PUT https://petstore3.swagger.io/api/v3/user/%3Cimg+src%3Dx+onerror%3Dalert%281%29%3E | username | <img src=x onerror=alert(1)>",
+  "status" : "passed",
+  "labels" : [ {
+    "value" : "https://petstore3.swagger.io/api/v3/user/%3Cimg+src%3Dx+onerror%3Dalert%281%29%3E",
+    "name" : "suite"
+  }, {
+    "value" : "PUT https://petstore3.swagger.io/api/v3/user/%3Cimg+src%3Dx+onerror%3Dalert%281%29%3E",
+    "name" : "feature"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780148319745,
+  "stop" : 1780148319813
+}

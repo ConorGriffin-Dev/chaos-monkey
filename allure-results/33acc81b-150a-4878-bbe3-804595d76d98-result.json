@@ -1,0 +1,15 @@
+{
+  "uuid" : "33acc81b-150a-4878-bbe3-804595d76d98",
+  "name" : "POST https://petstore3.swagger.io/api/v3/pet/1 | name | \uD835\uDD73\uD835\uDD8A\uD835\uDD91\uD835\uDD91\uD835\uDD94",
+  "status" : "passed",
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "https://petstore3.swagger.io/api/v3/pet/1"
+  }, {
+    "name" : "feature",
+    "value" : "POST https://petstore3.swagger.io/api/v3/pet/1"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780146414131,
+  "stop" : 1780146414451
+}

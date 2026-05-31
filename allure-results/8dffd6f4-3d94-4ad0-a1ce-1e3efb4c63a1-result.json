@@ -1,0 +1,15 @@
+{
+  "uuid" : "8dffd6f4-3d94-4ad0-a1ce-1e3efb4c63a1",
+  "name" : "POST https://petstore3.swagger.io/api/v3/store/order | shipDate | <img src=x onerror=alert(1)>",
+  "status" : "passed",
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "https://petstore3.swagger.io/api/v3/store/order"
+  }, {
+    "name" : "feature",
+    "value" : "POST https://petstore3.swagger.io/api/v3/store/order"
+  } ],
+  "attachments" : [ ],
+  "start" : 1780146414138,
+  "stop" : 1780146414451
+}

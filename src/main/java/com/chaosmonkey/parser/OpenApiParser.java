@@ -23,14 +23,16 @@ import java.util.Map;
  * objects — one per endpoint per HTTP method.
  *
  * Each FuzzTarget contains the path, method, and a map of field names
- * to their declared type and constraints. This gives FuzzPayloadGenerator
- * everything it needs to generate targeted payloads per field.
+ * to their declared type, location, and constraints. This gives
+ * FuzzPayloadGenerator everything it needs to generate targeted payloads
+ * per field, and gives FuzzRunner the location (path/query/header/body)
+ * needed to fire each payload in the right place.
  *
  * Supports:
  * - Remote URLs and local file paths
  * - JSON and YAML specs
  * - Request body schemas (POST, PUT, PATCH)
- * - Path and query parameter schemas (GET, DELETE)
+ * - Path, query, and header parameter schemas
  * - $ref resolution (handled automatically by Swagger Parser)
  * - Fallback to "string" type for fields with no declared type
  */
@@ -97,7 +99,7 @@ public class OpenApiParser {
 
     /**
      * Builds a FuzzTarget for a single endpoint and HTTP method.
-     * Combines fields from path/query parameters and the request body schema.
+     * Combines fields from path/query/header parameters and the request body schema.
      */
     private FuzzTarget buildTarget(String path,
                                    String method,
@@ -105,14 +107,15 @@ public class OpenApiParser {
                                    Schema<?> requestBodySchema) {
         Map<String, FieldSchema> fields = new HashMap<>();
 
-        // Extract path and query parameters
+        // Extract path, query, and header parameters
         if (operation.getParameters() != null) {
             for (Parameter param : operation.getParameters()) {
+                String in = param.getIn() != null ? param.getIn() : "query";
                 if (param.getSchema() != null) {
-                    fields.put(param.getName(), buildFieldSchema(param.getSchema()));
+                    fields.put(param.getName(), buildFieldSchema(param.getSchema(), in));
                 } else {
                     // No schema declared — fall back to untyped string fuzzing
-                    fields.put(param.getName(), fallbackSchema());
+                    fields.put(param.getName(), fallbackSchema(in));
                 }
             }
         }
@@ -120,12 +123,12 @@ public class OpenApiParser {
         // Extract request body fields (POST, PUT, PATCH)
         if (requestBodySchema != null && requestBodySchema.getProperties() != null) {
             requestBodySchema.getProperties().forEach((fieldName, fieldSchema) ->
-                    fields.put(fieldName, buildFieldSchema((Schema<?>) fieldSchema)));
+                    fields.put(fieldName, buildFieldSchema((Schema<?>) fieldSchema, "body")));
         }
 
         // If no fields found at all, add a generic "body" field for static fuzzing
         if (fields.isEmpty()) {
-            fields.put("body", fallbackSchema());
+            fields.put("body", fallbackSchema("body"));
         }
 
         log.debug("FuzzTarget built — {} {} | fields: {}", method, path, fields.keySet());
@@ -156,11 +159,11 @@ public class OpenApiParser {
 
     /**
      * Builds a FieldSchema from an OpenAPI Schema object.
-     * Extracts type and all declared constraints.
+     * Extracts type and all declared constraints, tagged with its location.
      * Falls back to "string" type if no type is declared.
      */
     @SuppressWarnings("rawtypes")
-    private FieldSchema buildFieldSchema(Schema<?> schema) {
+    private FieldSchema buildFieldSchema(Schema<?> schema, String in) {
         String type = schema.getType() != null ? schema.getType() : "string";
 
         List<String> enumValues = null;
@@ -181,15 +184,15 @@ public class OpenApiParser {
                 enumValues
         );
 
-        return new FieldSchema(type, constraints);
+        return new FieldSchema(type, in, constraints);
     }
 
     /**
      * Returns a default FieldSchema used when no type is declared in the spec.
      * Triggers static string fuzzing in FuzzPayloadGenerator.
      */
-    private FieldSchema fallbackSchema() {
-        return new FieldSchema("string", new FieldConstraints(
+    private FieldSchema fallbackSchema(String in) {
+        return new FieldSchema("string", in, new FieldConstraints(
                 null, null, null, null, null, null));
     }
 }
