@@ -1,0 +1,22 @@
+{
+  "uuid" : "5104a3ea-3f95-4f3d-9b34-060b6c031d8d",
+  "name" : "POST http://localhost:8080/api/vault/files | pin | ../../../etc/passwd",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/vault/files",
+    "name" : "suite"
+  }, {
+    "value" : "POST http://localhost:8080/api/vault/files",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "5104a3ea-3f95-4f3d-9b34-060b6c031d8d-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014078,
+  "stop" : 1780315014083
+}

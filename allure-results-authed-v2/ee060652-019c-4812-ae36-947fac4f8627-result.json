@@ -1,0 +1,22 @@
+{
+  "uuid" : "ee060652-019c-4812-ae36-947fac4f8627",
+  "name" : "POST http://localhost:8080/api/vault/files/not_an_int/download | id | not_an_int",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/vault/files/not_an_int/download",
+    "name" : "suite"
+  }, {
+    "value" : "POST http://localhost:8080/api/vault/files/not_an_int/download",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "ee060652-019c-4812-ae36-947fac4f8627-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780316770525,
+  "stop" : 1780316770537
+}

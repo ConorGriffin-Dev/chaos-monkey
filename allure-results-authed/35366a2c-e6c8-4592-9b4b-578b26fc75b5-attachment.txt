@@ -1,0 +1,1 @@
+{"pricePerKwh":0.3,"providerName":null}

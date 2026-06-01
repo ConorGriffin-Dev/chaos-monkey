@@ -38,6 +38,10 @@ import java.util.regex.Pattern;
  *       Non-fuzzed path params get a type-aware placeholder (1 for
  *       integer/number, "test" otherwise) so the URL resolves.
  *
+ * v0.4: if config.authHeader() is set, an Authorization header is
+ *       attached to every request — unless the fuzzed field IS the
+ *       Authorization header (then the fuzz payload wins).
+ *
  * Also retains the v0.1 static mode signature for backwards
  * compatibility with ChaosMonkeyCLI's --spec-less fallback.
  */
@@ -85,6 +89,13 @@ public class FuzzRunner {
         String resolvedPath = resolvePath(rawPath, fuzzCase, fieldName, payload);
         String fullUrl = baseUrl + resolvedPath;
 
+        // Multipart endpoints can't be meaningfully fuzzed with JSON — mark them
+        // so ResponseAnalyser doesn't count the resulting errors as SERVER_ERRORs.
+        List<String> seedFlags = new ArrayList<>();
+        if (fuzzCase.target().multipart()) {
+            seedFlags.add(ResponseAnalyser.MULTIPART_UNSUPPORTED);
+        }
+
         long start = System.currentTimeMillis();
 
         try {
@@ -97,6 +108,13 @@ public class FuzzRunner {
                                     .httpClientConfig()
                                     .setParam("http.connection.timeout", config.timeoutMs())
                                     .setParam("http.socket.timeout", config.timeoutMs())));
+
+            // Attach the configured auth header, unless this case is fuzzing the Authorization header itself.
+            boolean fuzzingAuthHeader = "header".equals(fieldIn)
+                    && "authorization".equalsIgnoreCase(fieldName);
+            if (config.authHeader() != null && !fuzzingAuthHeader) {
+                request.header("Authorization", config.authHeader());
+            }
 
             // Route the fuzzed field to the correct place, unless it already went into the path.
             if (!fieldIsPathParam) {
@@ -136,7 +154,7 @@ public class FuzzRunner {
                     response.statusCode(),
                     response.body().asString(),
                     duration,
-                    new ArrayList<>()
+                    new ArrayList<>(seedFlags)
             );
 
         } catch (Exception e) {
@@ -152,7 +170,7 @@ public class FuzzRunner {
                     0,
                     "REQUEST_FAILED: " + e.getMessage(),
                     duration,
-                    new ArrayList<>()
+                    new ArrayList<>(seedFlags)
             );
         }
     }
@@ -235,7 +253,7 @@ public class FuzzRunner {
             long start = System.currentTimeMillis();
 
             try {
-                Response response = RestAssured
+                RequestSpecification request = RestAssured
                         .given()
                         .baseUri(targetUrl)
                         .contentType("application/json")
@@ -243,7 +261,13 @@ public class FuzzRunner {
                                 .httpClient(io.restassured.config.HttpClientConfig
                                         .httpClientConfig()
                                         .setParam("http.connection.timeout", config.timeoutMs())
-                                        .setParam("http.socket.timeout", config.timeoutMs())))
+                                        .setParam("http.socket.timeout", config.timeoutMs())));
+
+                if (config.authHeader() != null) {
+                    request.header("Authorization", config.authHeader());
+                }
+
+                Response response = request
                         .body(Map.of("data", payload == null ? "" : payload))
                         .when()
                         .post()

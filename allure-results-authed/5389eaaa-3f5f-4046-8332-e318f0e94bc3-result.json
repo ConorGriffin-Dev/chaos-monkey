@@ -1,0 +1,22 @@
+{
+  "uuid" : "5389eaaa-3f5f-4046-8332-e318f0e94bc3",
+  "name" : "POST http://localhost:8080/api/vault/files/3.14/download | id | 3.14",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/vault/files/3.14/download",
+    "name" : "suite"
+  }, {
+    "value" : "POST http://localhost:8080/api/vault/files/3.14/download",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "5389eaaa-3f5f-4046-8332-e318f0e94bc3-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014080,
+  "stop" : 1780315014084
+}

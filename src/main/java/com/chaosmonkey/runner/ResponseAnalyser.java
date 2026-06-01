@@ -14,6 +14,11 @@ import java.util.List;
  *
  * All seven flag types defined in the system design are implemented here.
  * Flags are string constants — multiple flags can be attached to one result.
+ *
+ * v0.4: respects a pre-seeded MULTIPART_UNSUPPORTED flag set by FuzzRunner.
+ *       When present, SERVER_ERROR is suppressed (Chaos Monkey sends JSON to a
+ *       multipart endpoint, so a 5xx is expected noise, not a finding) — but
+ *       leak detectors still run, since a real leak there would still matter.
  */
 @Component
 public class ResponseAnalyser {
@@ -28,6 +33,9 @@ public class ResponseAnalyser {
     public static final String VALIDATION_MISSING  = "VALIDATION_MISSING";
     public static final String EMPTY_SUCCESS_BODY  = "EMPTY_SUCCESS_BODY";
 
+    // v0.4 — seeded by FuzzRunner for multipart/form-data endpoints fuzzed with JSON
+    public static final String MULTIPART_UNSUPPORTED = "MULTIPART_UNSUPPORTED";
+
     // Slow response flag is dynamic — includes the actual duration in the flag string
     public static final String SLOW_RESPONSE_PREFIX = "SLOW_RESPONSE_";
 
@@ -39,16 +47,22 @@ public class ResponseAnalyser {
      * with all applicable flags attached.
      *
      * Records are immutable — we build a new flags list and return
-     * a new FuzzResult with it attached.
+     * a new FuzzResult with it attached. Any flags already present on the
+     * incoming result (e.g. MULTIPART_UNSUPPORTED seeded by FuzzRunner) are
+     * preserved.
      */
     public FuzzResult analyse(FuzzResult result) {
-        List<String> flags = new ArrayList<>();
+        List<String> flags = new ArrayList<>(result.flags());
         String body = result.responseBody() == null ? "" : result.responseBody();
         int status = result.statusCode();
 
+        boolean multipartUnsupported = flags.contains(MULTIPART_UNSUPPORTED);
+
         // ── SERVER_ERROR ─────────────────────────────────────────────────────
-        // Any 5xx response indicates the server crashed or errored internally
-        if (status >= 500 && status < 600) {
+        // Any 5xx response indicates the server crashed or errored internally.
+        // Suppressed for multipart endpoints — Chaos Monkey sends JSON there, so
+        // a 5xx is expected noise rather than a genuine finding.
+        if (status >= 500 && status < 600 && !multipartUnsupported) {
             flags.add(SERVER_ERROR);
         }
 
@@ -79,16 +93,12 @@ public class ResponseAnalyser {
 
         // ── UNEXPECTED_SUCCESS ───────────────────────────────────────────────
         // 2xx response to a payload that was intentionally invalid.
-        // The payload field on the result tells us what was sent —
-        // null sent to any field is always intentionally invalid.
         if (status >= 200 && status < 300 && result.payload() == null) {
             flags.add(UNEXPECTED_SUCCESS);
         }
 
         // ── VALIDATION_MISSING ───────────────────────────────────────────────
         // 2xx response when a 400 was expected for a clearly out-of-range input.
-        // In v0.1 we detect this for the 10,000-char string payload specifically —
-        // no real API should accept that without validation.
         if (status >= 200 && status < 300
                 && result.payload() instanceof String s
                 && s.length() > 1000) {

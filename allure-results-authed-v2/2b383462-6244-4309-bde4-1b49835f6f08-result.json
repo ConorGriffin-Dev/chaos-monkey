@@ -1,0 +1,22 @@
+{
+  "uuid" : "2b383462-6244-4309-bde4-1b49835f6f08",
+  "name" : "POST http://localhost:8080/api/insights/generate | pricePerKwh | null",
+  "status" : "broken",
+  "labels" : [ {
+    "value" : "UNEXPECTED_SUCCESS",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/insights/generate",
+    "name" : "suite"
+  }, {
+    "value" : "POST http://localhost:8080/api/insights/generate",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "2b383462-6244-4309-bde4-1b49835f6f08-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780316770526,
+  "stop" : 1780316770542
+}

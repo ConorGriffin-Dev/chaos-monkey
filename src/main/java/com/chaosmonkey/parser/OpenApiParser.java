@@ -131,8 +131,23 @@ public class OpenApiParser {
             fields.put("body", fallbackSchema("body"));
         }
 
-        log.debug("FuzzTarget built — {} {} | fields: {}", method, path, fields.keySet());
-        return new FuzzTarget(path, method, fields);
+        boolean multipart = consumesMultipart(operation);
+
+        log.debug("FuzzTarget built — {} {} | fields: {} | multipart: {}",
+                method, path, fields.keySet(), multipart);
+        return new FuzzTarget(path, method, fields, multipart);
+    }
+
+    /**
+     * True if the operation's request body declares a multipart/form-data
+     * content type. Chaos Monkey sends JSON, so such endpoints can't be
+     * fuzzed meaningfully — their results are marked MULTIPART_UNSUPPORTED.
+     */
+    private boolean consumesMultipart(Operation operation) {
+        if (operation.getRequestBody() == null) return false;
+        if (operation.getRequestBody().getContent() == null) return false;
+        return operation.getRequestBody().getContent().keySet().stream()
+                .anyMatch(ct -> ct != null && ct.toLowerCase().contains("multipart/form-data"));
     }
 
     /**

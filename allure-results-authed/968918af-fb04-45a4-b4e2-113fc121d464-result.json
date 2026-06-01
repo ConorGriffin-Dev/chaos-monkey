@@ -1,0 +1,22 @@
+{
+  "uuid" : "968918af-fb04-45a4-b4e2-113fc121d464",
+  "name" : "PUT http://localhost:8080/api/users/me/rooms/ | id | null",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/users/me/rooms/",
+    "name" : "suite"
+  }, {
+    "value" : "PUT http://localhost:8080/api/users/me/rooms/",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "968918af-fb04-45a4-b4e2-113fc121d464-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014061,
+  "stop" : 1780315014075
+}

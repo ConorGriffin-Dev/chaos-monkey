@@ -1,0 +1,22 @@
+{
+  "uuid" : "c88d1244-e430-40aa-8660-d2f0c19e0942",
+  "name" : "DELETE http://localhost:8080/api/users/me/appliances/3.14 | id | 3.14",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/users/me/appliances/3.14",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE http://localhost:8080/api/users/me/appliances/3.14",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "c88d1244-e430-40aa-8660-d2f0c19e0942-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014069,
+  "stop" : 1780315014074
+}

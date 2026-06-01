@@ -1,0 +1,22 @@
+{
+  "uuid" : "660fe7b6-a4fd-4565-86c5-6d23d637a054",
+  "name" : "POST http://localhost:8080/api/vault/files | file | ..\\..\\..\\windows\\system32\\cmd.exe",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/vault/files",
+    "name" : "suite"
+  }, {
+    "value" : "POST http://localhost:8080/api/vault/files",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "660fe7b6-a4fd-4565-86c5-6d23d637a054-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014073,
+  "stop" : 1780315014080
+}

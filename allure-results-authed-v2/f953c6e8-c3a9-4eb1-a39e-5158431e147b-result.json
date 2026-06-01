@@ -1,0 +1,22 @@
+{
+  "uuid" : "f953c6e8-c3a9-4eb1-a39e-5158431e147b",
+  "name" : "DELETE http://localhost:8080/api/vault/files/not_an_int | id | not_an_int",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/vault/files/not_an_int",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE http://localhost:8080/api/vault/files/not_an_int",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "f953c6e8-c3a9-4eb1-a39e-5158431e147b-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780316770529,
+  "stop" : 1780316770534
+}

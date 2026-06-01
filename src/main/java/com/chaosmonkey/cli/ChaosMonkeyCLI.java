@@ -30,6 +30,10 @@ import java.util.stream.Collectors;
  *   Without --spec: FuzzPayloadLibrary → FuzzRunner.run() (v0.1 static fallback)
  *
  * v0.3: AllureReporter wired in. New CLI args: --output, --flag-only, --dry-run.
+ *
+ * v0.4: auth support. --bearer-token (token only, "Bearer " prepended) and
+ *       --auth-header (full header value). Injected into every request so
+ *       protected endpoints can be fuzzed behind authentication.
  */
 @ShellComponent
 public class ChaosMonkeyCLI {
@@ -86,16 +90,30 @@ public class ChaosMonkeyCLI {
             @ShellOption(value = "--dry-run",
                     defaultValue = "false",
                     help = "Parse spec and generate payloads but do not fire requests")
-            boolean dryRun
+            boolean dryRun,
+
+            @ShellOption(value = "--bearer-token",
+                    defaultValue = ShellOption.NULL,
+                    help = "JWT/bearer token (without 'Bearer ' prefix) sent as Authorization on every request")
+            String bearerToken,
+
+            @ShellOption(value = "--auth-header",
+                    defaultValue = ShellOption.NULL,
+                    help = "Full Authorization header value (e.g. 'Bearer xyz', 'ApiKey xyz'). Overrides --bearer-token")
+            String authHeader
     ) {
-        FuzzConfig config = new FuzzConfig(url, spec, output, timeout, flagOnly, dryRun);
+        // Resolve the auth header value: --auth-header wins; else --bearer-token gets "Bearer " prepended.
+        String resolvedAuth = resolveAuthHeader(bearerToken, authHeader);
+
+        FuzzConfig config = new FuzzConfig(url, spec, output, timeout, flagOnly, dryRun, resolvedAuth);
 
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        System.out.println("  Chaos Monkey — v0.3");
+        System.out.println("  Chaos Monkey — v0.4");
         System.out.println("  Target : " + url);
         System.out.println("  Spec   : " + (spec != null ? spec : "none — static mode"));
         System.out.println("  Output : " + output);
         System.out.println("  Timeout: " + timeout + "ms");
+        System.out.println("  Auth   : " + (resolvedAuth != null ? "enabled" : "none"));
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
         List<FuzzResult> results;
@@ -140,6 +158,21 @@ public class ChaosMonkeyCLI {
         results = responseAnalyser.analyseAll(results);
         allureReporter.write(results, output, flagOnly);
         printSummary(results, output);
+    }
+
+    /**
+     * Resolves the Authorization header value from the two auth flags.
+     * --auth-header takes precedence (full value as given). Otherwise
+     * --bearer-token is prefixed with "Bearer ". Returns null if neither set.
+     */
+    private String resolveAuthHeader(String bearerToken, String authHeader) {
+        if (authHeader != null && !authHeader.isBlank()) {
+            return authHeader;
+        }
+        if (bearerToken != null && !bearerToken.isBlank()) {
+            return "Bearer " + bearerToken;
+        }
+        return null;
     }
 
     // ── Output ────────────────────────────────────────────────────────────────

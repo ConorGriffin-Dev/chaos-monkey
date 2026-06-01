@@ -1,0 +1,22 @@
+{
+  "uuid" : "8cb0bc40-6060-400c-8569-8288e0fe63f2",
+  "name" : "PUT http://localhost:8080/api/users/me/energy-settings | pricePerKwh | null",
+  "status" : "broken",
+  "labels" : [ {
+    "value" : "UNEXPECTED_SUCCESS",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/users/me/energy-settings",
+    "name" : "suite"
+  }, {
+    "value" : "PUT http://localhost:8080/api/users/me/energy-settings",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "8cb0bc40-6060-400c-8569-8288e0fe63f2-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780316770507,
+  "stop" : 1780316770550
+}

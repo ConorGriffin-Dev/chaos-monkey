@@ -1,0 +1,22 @@
+{
+  "uuid" : "1dc5fbfd-f8c8-4902-a1c9-8fe7c9cb8369",
+  "name" : "DELETE http://localhost:8080/api/users/me/appliances/not_an_int | id | not_an_int",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/users/me/appliances/not_an_int",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE http://localhost:8080/api/users/me/appliances/not_an_int",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "1dc5fbfd-f8c8-4902-a1c9-8fe7c9cb8369-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014068,
+  "stop" : 1780315014073
+}

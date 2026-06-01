@@ -1,0 +1,22 @@
+{
+  "uuid" : "90e5815d-bebb-4dc2-8331-0bc0e35dfb1c",
+  "name" : "PUT http://localhost:8080/api/users/me/appliances/ | id | null",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/users/me/appliances/",
+    "name" : "suite"
+  }, {
+    "value" : "PUT http://localhost:8080/api/users/me/appliances/",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "90e5815d-bebb-4dc2-8331-0bc0e35dfb1c-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014067,
+  "stop" : 1780315014074
+}

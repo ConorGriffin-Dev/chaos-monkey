@@ -1,0 +1,1 @@
+{"code":"INTERNAL_ERROR","message":"An unexpected server error occurred.","timestamp":"2026-06-01T12:26:10.384355428Z","path":"/api/vault/files/-9999999999"}

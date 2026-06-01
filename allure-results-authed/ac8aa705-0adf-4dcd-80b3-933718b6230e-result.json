@@ -1,0 +1,22 @@
+{
+  "uuid" : "ac8aa705-0adf-4dcd-80b3-933718b6230e",
+  "name" : "DELETE http://localhost:8080/api/vault/files/-9999999999 | id | -9999999999",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/vault/files/-9999999999",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE http://localhost:8080/api/vault/files/-9999999999",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "ac8aa705-0adf-4dcd-80b3-933718b6230e-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014084,
+  "stop" : 1780315014088
+}

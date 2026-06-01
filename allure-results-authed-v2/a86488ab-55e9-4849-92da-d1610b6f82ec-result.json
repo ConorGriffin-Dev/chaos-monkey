@@ -1,0 +1,22 @@
+{
+  "uuid" : "a86488ab-55e9-4849-92da-d1610b6f82ec",
+  "name" : "GET http://localhost:8080/api/users/me/rooms | body | null",
+  "status" : "broken",
+  "labels" : [ {
+    "value" : "UNEXPECTED_SUCCESS",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/users/me/rooms",
+    "name" : "suite"
+  }, {
+    "value" : "GET http://localhost:8080/api/users/me/rooms",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "a86488ab-55e9-4849-92da-d1610b6f82ec-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780316770525,
+  "stop" : 1780316770545
+}

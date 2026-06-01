@@ -1,0 +1,22 @@
+{
+  "uuid" : "48c3b978-03c5-4b3e-99f8-240f92f495b7",
+  "name" : "POST http://localhost:8080/api/vault/files | pin | ",
+  "status" : "broken",
+  "labels" : [ {
+    "value" : "MULTIPART_UNSUPPORTED",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/vault/files",
+    "name" : "suite"
+  }, {
+    "value" : "POST http://localhost:8080/api/vault/files",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "48c3b978-03c5-4b3e-99f8-240f92f495b7-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780316770520,
+  "stop" : 1780316770530
+}

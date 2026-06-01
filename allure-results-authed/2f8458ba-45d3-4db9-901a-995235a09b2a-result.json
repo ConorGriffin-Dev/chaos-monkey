@@ -1,0 +1,22 @@
+{
+  "uuid" : "2f8458ba-45d3-4db9-901a-995235a09b2a",
+  "name" : "PUT http://localhost:8080/api/users/me/appliances/not_an_int | id | not_an_int",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/users/me/appliances/not_an_int",
+    "name" : "suite"
+  }, {
+    "value" : "PUT http://localhost:8080/api/users/me/appliances/not_an_int",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "2f8458ba-45d3-4db9-901a-995235a09b2a-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014067,
+  "stop" : 1780315014075
+}

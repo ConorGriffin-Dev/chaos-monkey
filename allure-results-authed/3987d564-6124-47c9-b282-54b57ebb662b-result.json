@@ -1,0 +1,22 @@
+{
+  "uuid" : "3987d564-6124-47c9-b282-54b57ebb662b",
+  "name" : "PUT http://localhost:8080/api/users/me/energy-settings | providerName | null",
+  "status" : "broken",
+  "labels" : [ {
+    "value" : "UNEXPECTED_SUCCESS",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/users/me/energy-settings",
+    "name" : "suite"
+  }, {
+    "value" : "PUT http://localhost:8080/api/users/me/energy-settings",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "3987d564-6124-47c9-b282-54b57ebb662b-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014067,
+  "stop" : 1780315014088
+}

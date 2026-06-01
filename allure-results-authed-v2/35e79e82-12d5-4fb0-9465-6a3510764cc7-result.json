@@ -1,0 +1,22 @@
+{
+  "uuid" : "35e79e82-12d5-4fb0-9465-6a3510764cc7",
+  "name" : "DELETE http://localhost:8080/api/users/me/rooms/ | id | null",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/users/me/rooms/",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE http://localhost:8080/api/users/me/rooms/",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "35e79e82-12d5-4fb0-9465-6a3510764cc7-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780316770505,
+  "stop" : 1780316770519
+}

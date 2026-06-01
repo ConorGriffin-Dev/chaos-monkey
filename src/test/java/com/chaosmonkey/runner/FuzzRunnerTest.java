@@ -11,21 +11,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FuzzRunnerTest {
 
-    private FuzzRunner fuzzRunner;
-    private FuzzConfig config;
+private FuzzRunner fuzzRunner;
+private FuzzConfig config;
 
-    @BeforeEach
-    void setUp() {
-        fuzzRunner = new FuzzRunner();
-        config = new FuzzConfig(            // ← was "FuzzConfig config ="
-                "https://jsonplaceholder.typicode.com/posts",
-                null,
-                "./allure-results",
-                10000,
-                false,
-                false
-        );
-    }
+@BeforeEach
+void setUp() {
+    fuzzRunner = new FuzzRunner();
+    config = new FuzzConfig(
+            "https://jsonplaceholder.typicode.com/posts",
+            null,
+            "./allure-results",
+            10000,
+            false,
+            false,
+            null
+    );
+}
 
     // ── Result count ──────────────────────────────────────────────────────────
 

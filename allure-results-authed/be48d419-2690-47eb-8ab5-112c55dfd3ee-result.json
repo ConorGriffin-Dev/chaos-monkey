@@ -1,0 +1,22 @@
+{
+  "uuid" : "be48d419-2690-47eb-8ab5-112c55dfd3ee",
+  "name" : "POST http://localhost:8080/api/insights/%3Cscript%3Ealert%281%29%3C%2Fscript%3E/more | runId | <script>alert(1)</script>",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/insights/%3Cscript%3Ealert%281%29%3C%2Fscript%3E/more",
+    "name" : "suite"
+  }, {
+    "value" : "POST http://localhost:8080/api/insights/%3Cscript%3Ealert%281%29%3C%2Fscript%3E/more",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "be48d419-2690-47eb-8ab5-112c55dfd3ee-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014081,
+  "stop" : 1780315014086
+}

@@ -182,4 +182,22 @@ class ResponseAnalyserTest {
         assertThat(analysed.get(1).flags()).isEmpty();
         assertThat(analysed.get(2).flags()).contains(UNEXPECTED_SUCCESS, EMPTY_SUCCESS_BODY);
     }
+
+    @Test
+    void analyse_multipartSeeded500_serverErrorSuppressed() {
+        FuzzResult seeded = new FuzzResult("http://x/api/vault/files", "POST", "file", "x",
+                500, "{\"code\":\"INTERNAL_ERROR\"}", 5,
+                new java.util.ArrayList<>(List.of(ResponseAnalyser.MULTIPART_UNSUPPORTED)));
+        FuzzResult out = analyser.analyse(seeded);
+        assertThat(out.flags()).contains(ResponseAnalyser.MULTIPART_UNSUPPORTED);
+        assertThat(out.flags()).doesNotContain(ResponseAnalyser.SERVER_ERROR);
+    }
+
+    @Test
+    void analyse_nonMultipart500_serverErrorStillFlagged() {
+        FuzzResult r = new FuzzResult("http://x/api/rooms/x", "DELETE", "id", "x",
+                500, "{\"code\":\"INTERNAL_ERROR\"}", 5, new java.util.ArrayList<>());
+        FuzzResult out = analyser.analyse(r);
+        assertThat(out.flags()).contains(ResponseAnalyser.SERVER_ERROR);
+    }
 }

@@ -1,0 +1,22 @@
+{
+  "uuid" : "a9500bec-1c12-4f9d-9657-71922a2981c7",
+  "name" : "POST http://localhost:8080/api/vault/files | file | null",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/vault/files",
+    "name" : "suite"
+  }, {
+    "value" : "POST http://localhost:8080/api/vault/files",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "a9500bec-1c12-4f9d-9657-71922a2981c7-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014070,
+  "stop" : 1780315014076
+}

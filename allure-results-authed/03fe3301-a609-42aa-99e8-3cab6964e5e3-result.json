@@ -1,0 +1,22 @@
+{
+  "uuid" : "03fe3301-a609-42aa-99e8-3cab6964e5e3",
+  "name" : "DELETE http://localhost:8080/api/users/me/rooms/not_an_int | id | not_an_int",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/users/me/rooms/not_an_int",
+    "name" : "suite"
+  }, {
+    "value" : "DELETE http://localhost:8080/api/users/me/rooms/not_an_int",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "03fe3301-a609-42aa-99e8-3cab6964e5e3-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014065,
+  "stop" : 1780315014072
+}

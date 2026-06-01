@@ -1,0 +1,22 @@
+{
+  "uuid" : "4723de78-aeb3-40c6-a7e6-6b40a2b5da0a",
+  "name" : "PUT http://localhost:8080/api/users/me/rooms/not_an_int | id | not_an_int",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/users/me/rooms/not_an_int",
+    "name" : "suite"
+  }, {
+    "value" : "PUT http://localhost:8080/api/users/me/rooms/not_an_int",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "4723de78-aeb3-40c6-a7e6-6b40a2b5da0a-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780316770504,
+  "stop" : 1780316770520
+}

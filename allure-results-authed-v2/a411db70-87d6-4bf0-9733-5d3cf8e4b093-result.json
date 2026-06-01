@@ -1,0 +1,22 @@
+{
+  "uuid" : "a411db70-87d6-4bf0-9733-5d3cf8e4b093",
+  "name" : "POST http://localhost:8080/api/vault/files | pin | ..\\..\\..\\windows\\system32\\cmd.exe",
+  "status" : "broken",
+  "labels" : [ {
+    "value" : "MULTIPART_UNSUPPORTED",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/vault/files",
+    "name" : "suite"
+  }, {
+    "value" : "POST http://localhost:8080/api/vault/files",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "a411db70-87d6-4bf0-9733-5d3cf8e4b093-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780316770523,
+  "stop" : 1780316770532
+}

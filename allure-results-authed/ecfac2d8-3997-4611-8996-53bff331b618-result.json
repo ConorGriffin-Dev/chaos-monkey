@@ -1,0 +1,22 @@
+{
+  "uuid" : "ecfac2d8-3997-4611-8996-53bff331b618",
+  "name" : "POST http://localhost:8080/api/vault/files | pin |  ",
+  "status" : "failed",
+  "labels" : [ {
+    "value" : "SERVER_ERROR",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/vault/files",
+    "name" : "suite"
+  }, {
+    "value" : "POST http://localhost:8080/api/vault/files",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "ecfac2d8-3997-4611-8996-53bff331b618-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014075,
+  "stop" : 1780315014081
+}

@@ -1,0 +1,22 @@
+{
+  "uuid" : "b25c995d-5cda-48a8-b081-ae0080f0b6de",
+  "name" : "GET http://localhost:8080/api/appliances | body | null",
+  "status" : "broken",
+  "labels" : [ {
+    "value" : "UNEXPECTED_SUCCESS",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/appliances",
+    "name" : "suite"
+  }, {
+    "value" : "GET http://localhost:8080/api/appliances",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "source" : "b25c995d-5cda-48a8-b081-ae0080f0b6de-attachment.txt",
+    "type" : "text/plain",
+    "name" : "Response Body"
+  } ],
+  "start" : 1780314022743,
+  "stop" : 1780314022750
+}

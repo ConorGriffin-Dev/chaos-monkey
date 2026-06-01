@@ -1,0 +1,22 @@
+{
+  "uuid" : "1bb7df09-5ea3-4a02-91c9-14213649387d",
+  "name" : "GET http://localhost:8080/api/vault/status | body | null",
+  "status" : "broken",
+  "labels" : [ {
+    "value" : "UNEXPECTED_SUCCESS",
+    "name" : "tag"
+  }, {
+    "value" : "http://localhost:8080/api/vault/status",
+    "name" : "suite"
+  }, {
+    "value" : "GET http://localhost:8080/api/vault/status",
+    "name" : "feature"
+  } ],
+  "attachments" : [ {
+    "name" : "Response Body",
+    "source" : "1bb7df09-5ea3-4a02-91c9-14213649387d-attachment.txt",
+    "type" : "text/plain"
+  } ],
+  "start" : 1780315014082,
+  "stop" : 1780315014087
+}
