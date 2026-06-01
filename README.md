@@ -119,13 +119,53 @@ Running against `https://petstore3.swagger.io/api/v3`:
 
 ---
 
+## Case Study — Real-World App (Currently)
+
+Beyond the Petstore demo, Chaos Monkey was run against **Currently**, a peer's
+Spring Boot energy-tracking API (with the author's permission), to test it
+against an app it had never seen.
+
+The target shipped no OpenAPI spec, so springdoc was added locally to publish
+one. Chaos Monkey then discovered **22 endpoints** automatically and fired
+**1,045 schema-aware payloads** — running with a valid JWT so it exercised the
+authenticated endpoints rather than bouncing off `401`s. The run targeted a
+local instance backed by a throwaway database.
+
+**Headline finding:** a consistent input-validation gap — roughly **30 endpoints
+returned `500 Internal Server Error` instead of `400 Bad Request`** when a path
+parameter couldn't bind to its expected type. Examples:
+
+- `DELETE /api/users/me/rooms/not_an_int` — non-integer ID
+- `PUT /api/users/me/appliances/3.14` — decimal where an integer ID is expected
+- `DELETE /api/vault/files/9999999999` — integer overflow
+- `PUT /api/users/me/rooms/` — write to a collection root with no ID
+
+The root cause was the same each time: a path variable fails to bind, Spring
+throws, and the request falls through to the generic 500 handler instead of
+being caught as a client error.
+
+**What held up:** every `500` returned a clean error envelope with **no stack
+traces and no database errors leaked**, the JWT auth wall **rejected every
+malformed payload** against protected endpoints, and no write endpoint silently
+accepted invalid data. The tool also correctly **categorised its own
+non-findings** — separating genuine errors from multipart endpoints it can't
+fuzz and from public read-only endpoints — so the real finding wasn't buried in
+noise.
+
+This run drove two tool improvements now in the codebase: **authentication
+support** (`--bearer-token` / `--auth-header`) to fuzz behind a login wall, and
+**multipart endpoint tagging** so file-upload endpoints aren't miscounted as
+server errors.
+
+---
+
 ## Running the Tests
 
 ```bash
 mvn test
 ```
 
-99 tests, 0 failures. Integration tests (which fire real requests at Petstore) are tagged `@Tag("integration")` and excluded from the standard build. To run them:
+101 tests, 0 failures. Integration tests (which fire real requests at Petstore) are tagged `@Tag("integration")` and excluded from the standard build. To run them:
 
 ```bash
 mvn test -Dgroups=integration
@@ -143,12 +183,13 @@ mvn test -Dgroups=integration
 | `--timeout` | No | `10000` | Request timeout in milliseconds |
 | `--flag-only` | No | `false` | Write only flagged results to the report |
 | `--dry-run` | No | `false` | Parse and generate payloads without firing requests |
-
+| `--bearer-token` | No | — | JWT/token sent as `Authorization: Bearer <token>` on every request |
+| `--auth-header` | No | — | Full `Authorization` header value (e.g. `ApiKey xyz`). Overrides `--bearer-token` |
 ---
 
 ## Why Chaos Monkey
 
-Most API fuzzing tools are either security scanners (Burp Suite), Python-first (Schemathesis), or require significant configuration to produce readable output. Chaos Monkey is:
+Most API fuzzing tools are either security scanners (Burp Suite) or require significant configuration to produce readable output. Chaos Monkey is:
 
 - **Java-first** — built with REST Assured and Spring Boot, the stack QA engineers in enterprise Java teams already use
 - **Allure-native** — every run produces a report QA teams already know how to read
